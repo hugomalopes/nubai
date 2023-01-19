@@ -1,0 +1,34 @@
+body {
+  font-family: 'Roboto Mono', monospace;
+  background-color: #ffd36b;
+}
+.header {
+  background-color: #a6bd63;
+}
+#inti-logo img {
+  max-width: 120px;
+}
+.traveller-text-width {
+  max-width: 70px;
+}
+.traveller-div-width {
+  max-width: 75px;
+}
+#map {
+}
+.div-border {
+  outline:1px solid black;
+  outline-offset: 8px;
+}
+/* adjust header sizes to small screens */
+@media (max-width: 800px) {
+  .header h1 { font-size: 1.1rem; }
+  .header h2 { font-size: 0.8rem; }
+  .header p { font-size: 0.5rem; }
+  #inti-logo img {
+    max-width: 70px;
+  }
+  .traveller-div-width {
+    max-width: 50px;
+  }
+}
