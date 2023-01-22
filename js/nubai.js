@@ -1,6 +1,33 @@
 // this is just a MVP built in a week, do not expect a treaty on software engineering
 // if you are reading this, proceed with caution and at your own risk!
 
+const localization_json = {
+    "pt":{
+        "header1": "Nu bai na América do Sul",
+        "header2": "Bora? Vamos? Let's go! <b>Nu bai!</b>",
+        "header3": "Vem connosco, sem filtros nem segundos contados...",
+        "travellers": "Em viagem:",
+        "language": "Língua:",
+        "route": "Percurso até agora",
+        "lastupdate": "Última actualização",
+        "photo": "Foto",
+        "chat": "Fala connosco",
+        "about": "Sobre o local"
+    },
+    "en": {
+        "header1": "Nu bai to South America",
+        "header2": "Bora? Vamos? Let's go! <b>Nu bai!</b>",
+        "header3": "Come with us, without filters nor evanescent stories...",
+        "travellers": "On travel:",
+        "language": "Language:",
+        "route": "Travelled route so far",
+        "lastupdate": "Last update",
+        "photo": "Photo",
+        "chat": "Chat with us",
+        "about": "About the place"
+    }
+};
+
 // get pastebin raw data through allorigins to bypass CORS
 // ?nocache=${Date.now()} is used to bypasse allorigins cache system
 let config_json_url = `https://api.allorigins.win/get?url=${encodeURIComponent('https://pastebin.com/raw/WWSYFdfQ')}?nocache=${Date.now()}`;
@@ -20,15 +47,15 @@ function wikipedia_summary(address_json) {
     });
     var wiki_query = wiki_query_list.join("+");
 
-    var wiki_search_url = `https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srsearch=${wiki_query}`;
+    var wiki_search_url = `https://${banana.locale}.wikipedia.org/w/api.php?action=query&list=search&format=json&srsearch=${wiki_query}`;
     fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(wiki_search_url)}`)
     .then(wiki_search_res => wiki_search_res.json())
     .then(wiki_search_allorigins_json => {
         var wiki_search_json = JSON.parse(wiki_search_allorigins_json.contents);
         if (wiki_search_json["query"]["search"]) {
             var wiki_first_result = wiki_search_json["query"]["search"][0];
-            // var wiki_summary_alt = `https://en.wikipedia.org/api/rest_v1/page/summary/<title>`
-            var wiki_summary_url = `https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&pageids=${wiki_first_result.pageid}&explaintext=true&exintro=true`;
+            // var wiki_summary_alt = `https://${banana.locale}.wikipedia.org/api/rest_v1/page/summary/<title>`
+            var wiki_summary_url = `https://${banana.locale}.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&pageids=${wiki_first_result.pageid}&explaintext=true&exintro=true`;
             fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(wiki_summary_url)}`)
             .then(wiki_summary_res => wiki_summary_res.json())
             .then(wiki_summary_allorigins_json => {
@@ -38,7 +65,7 @@ function wikipedia_summary(address_json) {
                     var wiki_div = document.getElementById('wikipedia-info');
                     wiki_div.innerHTML = `
                     <p>${wiki_summary_json["query"]["pages"][wiki_first_result.pageid]["extract"]}</p>
-                    <p>↳<a target='_blank' href='https://en.wikipedia.org/?curid=${wiki_first_result.pageid}'>Wikipedia</a></p>`;
+                    <p>↳<a target='_blank' href='https://${banana.locale}.wikipedia.org/?curid=${wiki_first_result.pageid}'>Wikipedia</a></p>`;
                 }
             })
             .catch(err => {
@@ -53,6 +80,35 @@ function wikipedia_summary(address_json) {
     });
 }
 
+function translate(locale) {
+    banana.setLocale(locale);
+
+    var flag_icon_locale = "";
+    if (locale === "en") {
+        flag_icon_locale = "gb";
+    } else {
+        flag_icon_locale = locale;
+    }
+    var language_dropdown = document.getElementById('language-dropdown');
+    language_dropdown.innerHTML = `<span class="fi fi-${flag_icon_locale}"></span>`;
+
+    var localizable_elements = document.querySelectorAll("[id^='banana-i18n-']");
+    localizable_elements.forEach(le => {
+        le.innerHTML = banana.i18n(le.dataset.i18n);  // a property data-<something> in HTML is accessible as dataset.<something>
+    })
+
+    wikipedia_summary(selected_address);
+}
+
+
+const banana = new Banana("pt");
+banana.load(localization_json, banana.locale);
+var localizable_elements = document.querySelectorAll("[id^='banana-i18n-']");
+localizable_elements.forEach(le => {
+    le.innerHTML = banana.i18n(le.dataset.i18n);  // a property data-<something> in HTML is accessible as dataset.<something>
+})
+
+let selected_address = {};  // useful to reload wikipedia info with new lang
 
 fetch(config_json_url)
 .then(res => res.json())
@@ -98,6 +154,14 @@ fetch(config_json_url)
     config_json.photo_list.forEach( (p, index, array) => {
         // adding coordinate markers
         var marker = L.marker([p.gps_latitude, p.gps_longitude]).addTo(map);
+        var popup_html = `
+            <a data-bs-toggle="modal" data-bs-target="#div-fullscreen-modal" onclick="img_fullscreen_modal('${p.imgbox_url}')">
+                <img class="img-fluid" src="${p.imgbox_url}" alt="selected-photo">
+            </a>
+            <br>
+            ${p.gps_date_stamp}
+            `;
+        marker.bindPopup(popup_html);
         marker.on('click', function() {
             var address_local_id_list = ["hamlet", "town", "city"];
             var address_local_found_list = [];
@@ -108,6 +172,15 @@ fetch(config_json_url)
             });
             var address_local = address_local_found_list.join(", ");
 
+            var address_state_county_id_list = ["county", "state"];
+            var address_state_county_found_list = [];
+            address_state_county_id_list.forEach( al => {
+                if (al in p.address) {
+                    address_state_county_found_list.push(p.address[al]);
+                }
+            });
+            var address_state_county = address_state_county_found_list.join(", ");
+
             // fill img div with photo
             var image_div = document.getElementById('selected-photo');
             image_div.innerHTML = `
@@ -115,8 +188,9 @@ fetch(config_json_url)
                 <img class="img-fluid" src="${p.imgbox_url}" alt="selected-photo">
             </a>
             <p>${p.text}</p>
-            <p>${p.gps_date_stamp}, ${address_local}, ${p.address.county}, ${p.address.country}</p>`;
+            <p>${p.gps_date_stamp}, ${address_local}, ${address_state_county}, ${p.address.country}</p>`;
 
+            selected_address = p.address;  // useful to reload wikipedia info with new lang
             wikipedia_summary(p.address);
         })
         latlngs.push([p.gps_latitude, p.gps_longitude]);
