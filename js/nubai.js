@@ -16,7 +16,7 @@ const localization_json = {
     },
     "en": {
         "header1": "Nu bai to South America",
-        "header2": "Bora? Vamos? Let's go! <b>Nu bai!</b>",
+        "header2": "Come on? Let's go? <b>Nu bai!</b>",
         "header3": "Come with us, without filters nor evanescent stories...",
         "travellers": "On travel:",
         "language": "Language:",
@@ -83,15 +83,6 @@ function wikipedia_summary(address_json) {
 function translate(locale) {
     banana.setLocale(locale);
 
-    var flag_icon_locale = "";
-    if (locale === "en") {
-        flag_icon_locale = "gb";
-    } else {
-        flag_icon_locale = locale;
-    }
-    var language_dropdown = document.getElementById('language-dropdown');
-    language_dropdown.innerHTML = `<span class="fi fi-${flag_icon_locale}"></span>`;
-
     var localizable_elements = document.querySelectorAll("[id^='banana-i18n-']");
     localizable_elements.forEach(le => {
         le.innerHTML = banana.i18n(le.dataset.i18n);  // a property data-<something> in HTML is accessible as dataset.<something>
@@ -101,14 +92,23 @@ function translate(locale) {
 }
 
 
+// initialize webpage localization
 const banana = new Banana("pt");
 banana.load(localization_json, banana.locale);
-var localizable_elements = document.querySelectorAll("[id^='banana-i18n-']");
+let localizable_elements = document.querySelectorAll("[id^='banana-i18n-']");
 localizable_elements.forEach(le => {
     le.innerHTML = banana.i18n(le.dataset.i18n);  // a property data-<something> in HTML is accessible as dataset.<something>
-})
+});
 
 let selected_address = {};  // useful to reload wikipedia info with new lang
+
+// add function to language flag icons
+let language_flag_elements = document.querySelectorAll("[id^='language-flag-']");
+language_flag_elements.forEach(lfe => {
+    lfe.addEventListener('click', () => {
+        translate(lfe.dataset.lang);
+    });
+});
 
 fetch(config_json_url)
 .then(res => res.json())
@@ -156,7 +156,7 @@ fetch(config_json_url)
         var marker = L.marker([p.gps_latitude, p.gps_longitude]).addTo(map);
         var popup_html = `
             <a data-bs-toggle="modal" data-bs-target="#div-fullscreen-modal" onclick="img_fullscreen_modal('${p.imgbox_url}')">
-                <img class="img-fluid" src="${p.imgbox_url}" alt="selected-photo">
+                <img class="img-fluid mouse-hand-pointer" src="${p.imgbox_url}" alt="selected-photo">
             </a>
             <br>
             ${p.gps_date_stamp}
@@ -185,7 +185,7 @@ fetch(config_json_url)
             var image_div = document.getElementById('selected-photo');
             image_div.innerHTML = `
             <a data-bs-toggle="modal" data-bs-target="#div-fullscreen-modal" onclick="img_fullscreen_modal('${p.imgbox_url}')">
-                <img class="img-fluid" src="${p.imgbox_url}" alt="selected-photo">
+                <img class="img-fluid mouse-hand-pointer" src="${p.imgbox_url}" alt="selected-photo">
             </a>
             <p>${p.text}</p>
             <p>${p.gps_date_stamp}, ${address_local}, ${address_state_county}, ${p.address.country}</p>`;

@@ -45,15 +45,8 @@
                 <p id="banana-i18n-language" data-i18n="language"></p>
               </div>
               <div class="col-sm-3">
-                <div class="dropdown">
-                  <a id="language-dropdown" class="btn btn-secondary dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                    <span class="fi fi-pt"></span>
-                  </a>
-                  <ul class="dropdown-menu text-center" aria-labelledby="dropdownMenuLink">
-                    <li><a class="dropdown-item fi fi-pt" onclick='translate("pt")'></a></li>
-                    <li><a class="dropdown-item fi fi-gb" onclick='translate("en")'></a></li>
-                  </ul>
-                </div>
+                <a id="language-flag-pt" data-lang="pt" class="dropdown-item fi fi-pt mouse-hand-pointer"></a>
+                <a id="language-flag-en" data-lang="en" class="dropdown-item fi fi-gb mouse-hand-pointer"></a>
               </div>
             </div>
           </div>
@@ -81,6 +74,11 @@
     <div class="container pt-5">
       <div class="row">
         <div class="col-md-6">
+          <h3 id="banana-i18n-about" data-i18n="about"></h3>
+          <div id="wikipedia-info">
+          </div>
+        </div>
+        <div class="col-md-6">
           <h3 id="banana-i18n-chat" data-i18n="chat"></h3>
           <div>
             <widgetbot
@@ -90,11 +88,6 @@
               height="400px"
             ></widgetbot>
             <script src="https://cdn.jsdelivr.net/npm/@widgetbot/html-embed"></script>
-        </div>
-        </div>
-        <div class="col-md-6">
-          <h3 id="banana-i18n-about" data-i18n="about"></h3>
-          <div id="wikipedia-info">
           </div>
         </div>
       </div>
@@ -130,7 +123,7 @@
 
     <footer class="bg-dark py-3 mt-5">
       <div class="container">
-        <p class="text-center text-white mb-0">Copyright &copy; Nu bai 2022</p>
+        <p class="text-center text-white mb-0">Copyright &copy; Nu bai 2023</p>
       </div>
     </footer>
 
