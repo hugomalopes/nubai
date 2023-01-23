@@ -232,8 +232,6 @@ fetch(config_json_url)
         }
         if (Object.keys(last_coordinates).length > 0) {
             current_route_leg_distance = getDistanceFromLatLonInKm(last_coordinates.lat, last_coordinates.lon, p.gps_latitude, p.gps_longitude);
-            console.log(last_coordinates);
-            console.log(current_route_leg_distance);
             travelled_km_estimate += current_route_leg_distance;
         }
         last_coordinates = {
