@@ -221,10 +221,10 @@ fetch(config_json_url)
             </a>
             <p>${p.text}</p>
             <p>${p.gps_date_stamp}, ${address_local}, ${address_state_county}, ${p.address.country}</p>`;
-        });
 
-        selected_address = p.address;  // useful to reload wikipedia info with new lang
-        wikipedia_summary(p.address);
+            selected_address = p.address;  // useful to reload wikipedia info with new lang
+            wikipedia_summary(p.address);
+        });
 
         // stats
         if (!visited_countries_list.includes(p.address.country)) {
