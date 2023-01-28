@@ -1,9 +1,20 @@
 body {
   font-family: 'Roboto Mono', monospace;
-  background-color: #ffd36b;
+  background-color:  #eeda9b  /* #ffd36b; first yellow */
+}
+p {
+  color: #a76e4d;
+}
+td {
+  color: #a76e4d;
 }
 .header {
   background-color: #a6bd63;
+  outline:1px solid white;
+  outline-offset: -1px;
+}
+.header p {
+  color: black;
 }
 #inti-logo img {
   max-width: 120px;
@@ -17,8 +28,8 @@ body {
 #map {
 }
 .div-border {
-  outline:1px solid black;
-  outline-offset: 8px;
+  outline:1px solid white;
+  outline-offset: 5px;
 }
 .mouse-hand-pointer {
   cursor: pointer;

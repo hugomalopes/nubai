@@ -182,6 +182,9 @@ fetch(config_json_url)
 
     // parsing photos list
     var latlngs = [];
+    config_json.photo_list.sort( (a, b) => {
+        return a.creation_date_ms - b.creation_date_ms;
+    });  // sorting photos by date
     config_json.photo_list.forEach( (p, index, array) => {
         // resolving different p.address keys for different geographical organizations
         var address_local_id_list = ["hamlet", "town", "city"];
