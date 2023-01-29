@@ -8,13 +8,13 @@ const localization_json = {
         "header3": "Vem connosco, sem filtros nem segundos contados...",
         "travellers": "Em viagem:",
         "language": "Língua:",
-        "route": "Percurso até agora",
+        "route": "Percurso",
         "lastupdate": "Última actualização",
         "photo": "Foto",
         "chat": "Fala connosco",
         "about": "Sobre o local",
         "countries": "Países visitados:",
-        "distance": "Distância percorrida (estimativa simples):",
+        "distance": "Distância percorrida:",
         "timeline": "Linha cronológica:"
     },
     "en": {
@@ -23,13 +23,13 @@ const localization_json = {
         "header3": "Come with us, without filters nor evanescent stories...",
         "travellers": "On travel:",
         "language": "Language:",
-        "route": "Travelled route so far",
+        "route": "Route",
         "lastupdate": "Last update",
         "photo": "Photo",
         "chat": "Chat with us",
         "about": "About the place",
         "countries": "Visited countries:",
-        "distance": "Distance travelled (simple estimate):",
+        "distance": "Travelled distance:",
         "timeline": "Timeline:"
     }
 };
