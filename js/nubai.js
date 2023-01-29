@@ -36,7 +36,15 @@ const localization_json = {
 
 // get pastebin raw data through allorigins to bypass CORS
 // ?nocache=${Date.now()} is used to bypasse allorigins cache system
-let config_json_url = `https://api.allorigins.win/get?url=${encodeURIComponent('https://pastebin.com/raw/WWSYFdfQ')}?nocache=${Date.now()}`;
+let pastebin_url = 'https://pastebin.com/raw/';
+let pastebin_slug = 'KN2C7NZL';
+let pastesio_url = 'https://pastes.io/raw/';
+let pastesio_slug = 'zcpl2vbrqk';
+let config_json_url = `https://api.allorigins.win/get?url=${encodeURIComponent(pastebin_url + pastebin_slug)}?nocache=${Date.now()}`;
+
+function atou(b64) {
+    return decodeURIComponent(escape(atob(b64)));
+}
 
 // haversine formula to determinate the great-circle distance between coordinates
 // kudos to https://stackoverflow.com/questions/18883601/function-to-calculate-distance-between-two-coordinates
@@ -141,8 +149,8 @@ fetch(config_json_url)
 .then(allorigins_json => {
     // console.log(config_json_url);
     // console.log(JSON.stringify(allorigins_json));
-
-    let config_json = JSON.parse(allorigins_json.contents);
+    // parse base64 json config file (which contains ghost white spaces in between)
+    let config_json = JSON.parse(atou(allorigins_json.contents.replaceAll(' ', '')));  // apparently, atob can parse white spaces too
 
     // populating page with config data
 
@@ -187,7 +195,7 @@ fetch(config_json_url)
     });  // sorting photos by date
     config_json.photo_list.forEach( (p, index, array) => {
         // resolving different p.address keys for different geographical organizations
-        var address_local_id_list = ["hamlet", "town", "city"];
+        var address_local_id_list = ["hamlet", "town", "city_district", "city"];
         var address_local_found_list = [];
         address_local_id_list.forEach( al => {
             if (al in p.address) {
@@ -196,7 +204,7 @@ fetch(config_json_url)
         });
         var address_local = address_local_found_list.join(", ");
 
-        var address_state_county_id_list = ["county", "state"];
+        var address_state_county_id_list = ["county", "state", "archipelago"];
         var address_state_county_found_list = [];
         address_state_county_id_list.forEach( al => {
             if (al in p.address) {
@@ -205,6 +213,9 @@ fetch(config_json_url)
         });
         var address_state_county = address_state_county_found_list.join(", ");
 
+        var photo_date = new Date(p.creation_date_ms * 1000);  // seconds to ms
+        var photo_date_str = photo_date.toLocaleString();
+
         // adding coordinate markers
         var marker = L.marker([p.gps_latitude, p.gps_longitude]).addTo(map);
         var popup_html = `
@@ -212,7 +223,7 @@ fetch(config_json_url)
                 <img class="img-fluid mouse-hand-pointer" src="${p.imgbox_url}" alt="selected-photo">
             </a>
             <br>
-            ${p.gps_date_stamp}
+            ${photo_date_str}
             `;
         marker.bindPopup(popup_html);
         marker.on('click', function() {
@@ -223,7 +234,7 @@ fetch(config_json_url)
                 <img class="img-fluid mouse-hand-pointer" src="${p.imgbox_url}" alt="selected-photo">
             </a>
             <p>${p.text}</p>
-            <p>${p.gps_date_stamp}, ${address_local}, ${address_state_county}, ${p.address.country}</p>`;
+            <p>${photo_date_str}, ${address_local}, ${address_state_county}, ${p.address.country}</p>`;
 
             selected_address = p.address;  // useful to reload wikipedia info with new lang
             wikipedia_summary(p.address);
@@ -244,7 +255,7 @@ fetch(config_json_url)
         var stats_timeline_table = document.getElementById('stats-timeline-table');
         stats_timeline_table.innerHTML += `
             <tr>
-              <td class="border-dark border-end text-end">${p.gps_date_stamp}</td>
+              <td class="border-dark border-end text-end">${photo_date_str}</td>
               <td class="text-start col-md-7">${address_local}, ${address_state_county}, ${p.address.country}</td>
             </tr>
         `;
