@@ -277,7 +277,14 @@ fetch(config_json_url)
     // zoom the map to the polyline
     // map.fitBounds(polyline.getBounds());
     // zoom to the last position
-    map.flyTo(latlngs[latlngs.length - 1]);
+    map.flyTo(
+      latlngs[latlngs.length - 1],
+      18,
+      {
+        animate: true,
+        duration: 1.5
+      }
+    );
 })
 .catch(err => {
     throw err;
