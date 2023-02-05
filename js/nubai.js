@@ -276,7 +276,8 @@ fetch(config_json_url)
     var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
     // zoom the map to the polyline
     map.fitBounds(polyline.getBounds());
-
+    // then zoom to the last position
+    map.flyTo(latlngs[latlngs.length - 1]);
 })
 .catch(err => {
     throw err;
