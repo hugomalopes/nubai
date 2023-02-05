@@ -279,10 +279,10 @@ fetch(config_json_url)
     // zoom to the last position
     map.flyTo(
       latlngs[latlngs.length - 1],
-      18,
+      14,
       {
         animate: true,
-        duration: 1.5
+        duration: 2
       }
     );
 })
