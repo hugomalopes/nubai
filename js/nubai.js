@@ -71,6 +71,20 @@ function img_fullscreen_modal(src) {
     img.src = src;
 }
 
+function prev_marker() {
+  if (selected_marker_idx > 0) {
+    selected_marker_idx -= 1;
+    marker_list[selected_marker_idx].fire('click');
+  }
+}
+
+function next_marker() {
+  if (selected_marker_idx < (marker_list.length - 1)) {
+    selected_marker_idx += 1;
+    marker_list[selected_marker_idx].fire('click');
+  }
+}
+
 function wikipedia_summary(address_json) {
     var address_level_list = ["hamlet", "town", "city", "country"];
     var wiki_query_list = [];
@@ -135,6 +149,9 @@ localizable_elements.forEach(le => {
 });
 
 let selected_address = {};  // useful to reload wikipedia info with new lang
+
+let marker_list = [];  // useful for next and previous photo
+let selected_marker_idx = 0;
 
 // add function to language flag icons
 let language_flag_elements = document.querySelectorAll("[id^='language-flag-']");
@@ -233,12 +250,21 @@ fetch(config_json_url)
             <a data-bs-toggle="modal" data-bs-target="#div-fullscreen-modal" onclick="img_fullscreen_modal('${p.imgbox_url}')">
                 <img class="img-fluid mouse-hand-pointer" src="${p.imgbox_url}" alt="selected-photo">
             </a>
+            <div class="row">
+              <div class="col d-flex justify-content-start">
+                <a class="mouse-hand-pointer" onclick="prev_marker()">\<</a>
+              </div>
+              <div class="col d-flex justify-content-end">
+                <a class="mouse-hand-pointer" onclick="next_marker()">\></a>
+              </div>
+            </div>
             <p>${p.text}</p>
             <p>${photo_date_str}, ${address_local}, ${address_state_county}, ${p.address.country}</p>`;
 
             selected_address = p.address;  // useful to reload wikipedia info with new lang
             wikipedia_summary(p.address);
         });
+        marker_list.push(marker);
 
         // stats
         if (!visited_countries_list.includes(p.address.country)) {
@@ -256,7 +282,7 @@ fetch(config_json_url)
         stats_timeline_table.innerHTML += `
             <tr>
               <td class="border-dark border-end text-end">${photo_date_str}</td>
-              <td class="text-start col-md-7">${address_local}, ${address_state_county}, ${p.address.country}</td>
+              <td class="text-start col-md-7">${address_state_county}, ${p.address.country}<br>${p.text.slice(0, 50)}${p.text.length >= 50 ? "..." : ""}<a id="stats-timeline-up>↑</a></td>
             </tr>
         `;
 
@@ -264,6 +290,7 @@ fetch(config_json_url)
 
         if (index === array.length - 1) {
             marker.fire('click');
+            selected_marker_idx = index;
         }
     });
 
