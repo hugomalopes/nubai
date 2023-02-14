@@ -219,7 +219,7 @@ fetch(config_json_url)
     });  // sorting photos by date
     config_json.photo_list.forEach( (p, index, array) => {
         // resolving different p.address keys for different geographical organizations
-        var address_local_id_list = ["hamlet", "town", "city_district", "city"];
+        var address_local_id_list = ["tourism", "hamlet", "town", "city_district", "city"];
         var address_local_found_list = [];
         address_local_id_list.forEach( al => {
             if (al in p.address) {
