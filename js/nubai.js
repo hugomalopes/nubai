@@ -86,7 +86,7 @@ function next_marker() {
 }
 
 function goto_marker(idx) {
-  if ((idx > 0) && (idx <= marker_list.length)) {
+  if ((idx >= 0) && (idx < marker_list.length)) {
     selected_marker_idx = idx;
     marker_list[selected_marker_idx].fire('click');
   }
