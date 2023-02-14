@@ -85,6 +85,13 @@ function next_marker() {
   }
 }
 
+function goto_marker(idx) {
+  if ((idx > 0) && (idx <= marker_list.length)) {
+    selected_marker_idx = idx;
+    marker_list[selected_marker_idx].fire('click');
+  }
+}
+
 function wikipedia_summary(address_json) {
     var address_level_list = ["hamlet", "town", "city", "country"];
     var wiki_query_list = [];
@@ -261,6 +268,7 @@ fetch(config_json_url)
             <p>${p.text}</p>
             <p>${photo_date_str}, ${address_local}, ${address_state_county}, ${p.address.country}</p>`;
 
+            selected_marker_idx = index;
             selected_address = p.address;  // useful to reload wikipedia info with new lang
             wikipedia_summary(p.address);
         });
@@ -282,7 +290,7 @@ fetch(config_json_url)
         stats_timeline_table.innerHTML += `
             <tr>
               <td class="border-dark border-end text-end">${photo_date_str}</td>
-              <td class="text-start col-md-7">${address_state_county}, ${p.address.country}<br>${p.text.slice(0, 50)}${p.text.length >= 50 ? "..." : ""}<a id="stats-timeline-up>↑</a></td>
+              <td class="text-start col-md-7">${address_state_county}, ${p.address.country}<br>${p.text.slice(0, 50)}${p.text.length >= 50 ? "..." : ""} <a href="#selected-photo" onclick="goto_marker(${index})">↑</a></td>
             </tr>
         `;
 
