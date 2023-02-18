@@ -93,7 +93,7 @@ function goto_marker(idx) {
 }
 
 function wikipedia_summary(address_json) {
-    var address_level_list = ["tourism", "hamlet", "town", "city", "country"];
+    var address_level_list = ["tourism", "hamlet", "town", "city", "state", "country"];
     var wiki_query_list = [];
     address_level_list.forEach( al => {
         if (al in address_json) {
