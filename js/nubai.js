@@ -93,7 +93,7 @@ function goto_marker(idx) {
 }
 
 function wikipedia_summary(address_json) {
-    var address_level_list = ["hamlet", "town", "city", "country"];
+    var address_level_list = ["tourism", "hamlet", "town", "city", "country"];
     var wiki_query_list = [];
     address_level_list.forEach( al => {
         if (al in address_json) {
@@ -219,7 +219,7 @@ fetch(config_json_url)
     });  // sorting photos by date
     config_json.photo_list.forEach( (p, index, array) => {
         // resolving different p.address keys for different geographical organizations
-        var address_local_id_list = ["tourism", "hamlet", "town", "city_district", "city"];
+        var address_local_id_list = ["tourism", "road", "hamlet", "town", "city_district", "city"];
         var address_local_found_list = [];
         address_local_id_list.forEach( al => {
             if (al in p.address) {
