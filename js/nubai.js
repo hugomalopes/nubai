@@ -3,7 +3,7 @@
 
 const localization_json = {
     "pt":{
-        "header1": "Nu bai na América do Sul",
+        "header1": "Nu bai na América do Sul e Oceania",
         "header2": "Bora? Vamos? Let's go! <b>Nu bai!</b>",
         "header3": "Vem connosco, sem filtros nem segundos contados...",
         "travellers": "Em viagem:",
@@ -18,7 +18,7 @@ const localization_json = {
         "timeline": "Linha cronológica:"
     },
     "en": {
-        "header1": "Nu bai to South America",
+        "header1": "Nu bai to South America and Oceania",
         "header2": "Come on? Let's go? <b>Nu bai!</b>",
         "header3": "Come with us, without filters nor evanescent stories...",
         "travellers": "On travel:",
