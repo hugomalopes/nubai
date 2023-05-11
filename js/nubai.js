@@ -302,6 +302,10 @@ fetch(config_json_url)
         }
     });
 
+    // remove loading div
+    var loading_div = document.getElementById("loading");
+    loading_div.remove();
+
     // fill stats container
     var stats_visited_countries = document.getElementById('stats-visited-countries');
     stats_visited_countries.innerHTML = visited_countries_list.join(", ");
